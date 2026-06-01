@@ -3,7 +3,7 @@ import formatData from "./helper.js";
 const loader = document.getElementById("loader");
 const container = document.getElementById("container");
 const questionText = document.getElementById("question__text");
-const answerText = document.querySelectorAll(".answer__text");
+const answerList = document.querySelectorAll(".answer__text");
 
 const URL =
   "https://opentdb.com/api.php?amount=10&difficulty=easy&type=multiple";
@@ -26,18 +26,33 @@ const start = () => {
 };
 
 const showQuestion = () => {
-  const { question, answers, correctAnswersIndex } =
-    formattedData[questionIndex];
-  correctAnswer = correctAnswersIndex;
+  const currentQuestion = formattedData[questionIndex];
+
+  const { question, answers } = currentQuestion;
+  correctAnswer = currentQuestion.correctAnswerIndex;
+
+  console.log("Correct Answer Index:", correctAnswer);
+
   questionText.innerText = question;
-  answerText.forEach((button, index) => {
+
+  answerList.forEach((button, index) => {
     button.innerText = answers[index];
+    button.classList.remove("correct", "wrong");
   });
 };
 
-const checkAnswer = () => {};
+const checkAnswer = (event, index) => {
+  const isCorrect = index === correctAnswer ? true : false;
+  if (isCorrect) {
+    event.target.classList.add("correct");
+  } else {
+    event.target.classList.add("incorrect");
+
+    answerList[correctAnswer].classList.add("correct");
+  }
+};
 
 window.addEventListener("load", fetchData);
-answerText.forEach((button, index) => {
-  button.addEventListener("click", checkAnswer);
+answerList.forEach((button, index) => {
+  button.addEventListener("click", (event) => checkAnswer(event, index));
 });
