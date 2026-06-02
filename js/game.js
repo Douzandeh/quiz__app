@@ -6,6 +6,7 @@ const questionText = document.getElementById("question__text");
 const answerList = document.querySelectorAll(".answer__text");
 const scoreText = document.getElementById("score");
 const nextButton = document.getElementById("next__button");
+const finishButton = document.getElementById("finish__button");
 const questionNumber = document.getElementById("question__number");
 
 const COREECT_BONUS = 10;
@@ -72,7 +73,7 @@ const nextHandler = () => {
     showQuestion();
     removeClasses();
   } else {
-    window.location.assign("/end.html");
+    finishHandler();
   }
 };
 
@@ -80,8 +81,14 @@ const removeClasses = () => {
   answerList.forEach((button) => (button.className = "answer__text"));
 };
 
+const finishHandler = () => {
+  localStorage.setItem("score", JSON.stringify(score));
+  window.location.assign("/end.html");
+};
+
 window.addEventListener("load", fetchData);
 nextButton.addEventListener("click", nextHandler);
+finishButton.addEventListener("click", finishHandler);
 answerList.forEach((button, index) => {
   button.addEventListener("click", (event) => checkAnswer(event, index));
 });
