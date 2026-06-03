@@ -10,6 +10,7 @@ const scoreText = document.getElementById("score");
 const nextButton = document.getElementById("next__button");
 const finishButton = document.getElementById("finish__button");
 const questionNumber = document.getElementById("question__number");
+const err = document.getElementById("error");
 
 const COREECT_BONUS = 10;
 
@@ -22,10 +23,15 @@ let score = 0;
 let isAccepted = true;
 
 const fetchData = async () => {
-  const response = await fetch(URL);
-  const json = await response.json();
-  formattedData = formatData(json.results);
-  start();
+  try {
+    const response = await fetch(URL);
+    const json = await response.json();
+    formattedData = formatData(json.results);
+    start();
+  } catch (err) {
+    loader.style.display = "none";
+    error.style.display = "block";
+  }
 };
 
 const start = () => {
